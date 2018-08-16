@@ -5,7 +5,7 @@ import {addNode} from "../actions";
 
 const mapDispatchToProps = dispatch => {
     return {
-        addArticle: article => dispatch(addNode(article))
+        addNode: article => dispatch(addNode(article))
     };
 };
 
@@ -14,7 +14,7 @@ class ConnectedForm extends Component {
         super();
 
         this.state = {
-            title: ""
+            value: ""
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -28,28 +28,30 @@ class ConnectedForm extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        const {title} = this.state;
+        const {value} = this.state;
         const id = uuidv1();
-        this.props.addArticle({title,id});
-        this.setState({title: ""});
+        if (value && !isNaN(value)) {
+            this.props.addNode({value,id});
+        }
+        this.setState({value: ""});
     }
 
     render() {
-        const { title } = this.state;
+        const { value } = this.state;
         return (
             <form onSubmit={this.handleSubmit}>
                 <div className="form-group">
-                    <label htmlFor="title">Title</label>
+                    <label htmlFor="value">Value</label>
                     <input
                         type="text"
                         className="form-control"
-                        id="title"
-                        value={title}
+                        id="value"
+                        value={value}
                         onChange={this.handleChange}
                     />
                 </div>
                 <button type="submit" className="btn btn-success btn-lg">
-                    SAVE
+                    ADD
                 </button>
             </form>
         );
